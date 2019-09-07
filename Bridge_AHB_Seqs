@@ -16,6 +16,7 @@ logic [2:0] ssize;
 logic [3:0]srep=0;
 bit [4:0] data_bytes;
 logic [31:0]result;
+bit [9:0] srand_len;
 integer total=0;
 integer align=0;
 begin
@@ -33,34 +34,39 @@ finish_item(req);
 sburst=req.hburst;
 saddr=req.haddr;
 ssize=req.hsize;
+srand_len=req.rand_len;
 data_bytes=((2**(ssize+3))/8);
 
 case(sburst)
+            //Single Transfer
             3'b000:srep=0;
+            //Burst of Unspecified length 
+            3'b001:srep=srand_len-1;
+            //4 beat Wrapping Burst
             3'b010:begin
                     total=data_bytes*4;
                     align=$clog2(total);
                     srep=3;
                     end
-
+             //4 beat incrementing burst
              3'b011:srep=3;
-
+            //8 beat wrapping burst
              3'b100:begin
                     total=data_bytes*8;
                     align=$clog2(total);
                     srep=7;
                     end
-
+             //8 beat incrementing burst
              3'b101:srep=7;
-
+            //16 beat wrapping burst
              3'b110:begin
                     total=data_bytes*16;
                     align=$clog2(total);
                     srep=15;
                     end
-  
+             //16 beat incrementing beat
              3'b111:srep=15;
-
+                        
              default:begin
                      align=0;
                      end
