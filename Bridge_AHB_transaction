@@ -1,0 +1,33 @@
+class ahb_txn extends uvm_sequence_item;
+`uvm_object_utils(ahb_txn)
+
+rand bit [1:0]htrans;
+rand bit [31:0]haddr;
+rand bit [9:0] rand_len;
+rand bit hwrite;
+bit [31:0]hwdata=1;
+rand bit [2:0]hsize;
+rand bit [2:0] hburst;
+bit [31:0]hrdata;
+bit hreadyin;
+bit [1:0]hresp;
+constraint c2{hsize==1 -> haddr%2==0;
+              hsize==2 -> haddr%4==0;}
+constraint c3{hburst==001 -> rand_len*hsize < 1024;}
+
+function new(string name="ahb_txn");
+super.new(name);
+endfunction
+
+function void do_print(uvm_printer printer);
+super.do_print(printer);
+printer.print_field("htrans",this.htrans,2,UVM_BIN);
+printer.print_field("haddr",this.haddr,32,UVM_DEC);
+printer.print_field("hwdata",this.hwdata,32,UVM_DEC);
+printer.print_field("hsize",this.hsize,3,UVM_BIN);
+printer.print_field("hrdata",this.hrdata,32,UVM_DEC);
+printer.print_field("hresp",this.hresp,2,UVM_BIN);
+printer.print_field("hreadyin",this.hreadyin,1,UVM_BIN);
+printer.print_field("hburst",this.hburst,3,UVM_BIN);
+endfunction
+endclass
