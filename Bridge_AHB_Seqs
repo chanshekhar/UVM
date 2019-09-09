@@ -90,7 +90,7 @@ case(sburst)
  
  req=ahb_txn::type_id::create("req");
  start_item(req);
- assert(req.randomize with {htrans=='b11; hwrite==1; hburst==sburst; hsize==ssize; haddr==saddr;});
+ assert(req.randomize with {htrans=='b11; hburst==sburst; hsize==ssize; haddr==saddr;});
  finish_item(req);
  end
  
