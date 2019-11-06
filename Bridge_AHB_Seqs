@@ -35,7 +35,7 @@ sburst=req.hburst;
 saddr=req.haddr;
 ssize=req.hsize;
 srand_len=req.rand_len;
-data_bytes=((2**(ssize+3))/8);
+data_bytes=2**(ssize);
 
 case(sburst)
             //Single Transfer
